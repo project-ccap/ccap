@@ -11,12 +11,14 @@ import PIL.Image as PILImage
 
 import matplotlib.pyplot as plt
 
-# グラフ中の日本語がトーフになるので，その対策
-import matplotlib.font_manager
-
-# Windows, Linux の場合には適当に書き換える必要がある
-fontprop = matplotlib.font_manager.FontProperties(
-    fname="/System/Library/Fonts/ヒラギノ角ゴシック W7.ttc")
+# pip install japanize-matplotlib
+import japanize_matplotlib
+## グラフ中の日本語がトーフになるので，その対策
+#import matplotlib.font_manager
+#
+## Windows, Linux の場合には適当に書き換える必要がある
+#fontprop = matplotlib.font_manager.FontProperties(
+#    fname="/System/Library/Fonts/ヒラギノ角ゴシック W7.ttc")
 
 
 class snodgrassDataset():
@@ -143,8 +145,8 @@ class snodgrassDataset():
             return None
         fig = plt.figure(figsize=(4, 6))
         ax = fig.add_subplot(1, 1, 1)
-        ax.set_title('{0}'.format(label), fontdict={
-                     "fontproperties": fontprop}, fontsize=14)
+        ax.set_title('{0}'.format(label)) # , fontdict={
+                                          #"fontproperties": fontprop}, fontsize=14)
         ax.set_axis_off()
         img = PILImage.open(img_file)
         if img.mode == 'L':
@@ -163,16 +165,16 @@ class snodgrassDataset():
             img_file, label = self.no_or_label(no + 1, lang=lang)
             ax = fig.add_subplot(rows, cols, no+1)  # 縦，横，通し番号
 
-            ax.set_title('{0}'.format(label), fontdict={
-                "fontproperties": fontprop}, fontsize=14)
+            ax.set_title('{0}'.format(label)) 
+                        #fontdict={ "fontproperties": fontprop}, fontsize=14)
             ax.set_axis_off()
             img = PILImage.open(img_file)
             if img.mode == 'L':
                 ax.imshow(img, cmap='gray')
             else:
                 ax.imshow(img)
-            ax.set_title('{0} {1}'.format(no, label), fontdict={
-                         "fontproperties": fontprop}, fontsize=14)
+            ax.set_title('{0} {1}'.format(no, label))
+                        #fontdict={ "fontproperties": fontprop}, fontsize=14)
             ax.axis(False)
 
 
@@ -278,8 +280,8 @@ class imagenetDataset():
             label = label_
         else:
             label = self.WordNetID2ent(label)['label']
-        ax.set_title('{0}'.format(label), fontdict={
-                     "fontproperties": fontprop}, fontsize=14)
+        ax.set_title('{0}'.format(label)) # , fontdict={
+                                          #"fontproperties": fontprop}, fontsize=14)
         ax.set_axis_off()
         img = PILImage.open(img_file)
         if img.mode == 'L':
@@ -410,8 +412,8 @@ class salaDataset():
 
         fig = plt.figure(figsize=(4, 6))
         ax = fig.add_subplot(1, 1, 1)
-        ax.set_title('{0}'.format(label), fontdict={
-                     "fontproperties": fontprop}, fontsize=14)
+        ax.set_title('{0}'.format(label))
+                    #, fontdict={ "fontproperties": fontprop}, fontsize=14)
         ax.set_axis_off()
         img = PILImage.open(img_file)
         if img.mode == 'L':
@@ -430,16 +432,16 @@ class salaDataset():
             img_file, label = self.data[no]['img'], self.data[no]['label']
             ax = fig.add_subplot(rows, cols, no+1)  # 縦，横，通し番号
 
-            ax.set_title('{0}'.format(label), fontdict={
-                "fontproperties": fontprop}, fontsize=14)
+            ax.set_title('{0}'.format(label))
+                        #, fontdict={ "fontproperties": fontprop}, fontsize=14)
             ax.set_axis_off()
             img = PILImage.open(img_file)
             if img.mode == 'L':
                 ax.imshow(img, cmap='gray')
             else:
                 ax.imshow(img)
-            ax.set_title('{0} {1}'.format(no, label), fontdict={
-                         "fontproperties": fontprop}, fontsize=14)
+            ax.set_title('{0} {1}'.format(no, label))
+                          #, fontdict={ "fontproperties": fontprop}, fontsize=14)
             ax.axis(False)
 
 
@@ -497,9 +499,8 @@ class tlpaDataset():
 
         fig = plt.figure(figsize=(4, 6))
         ax = fig.add_subplot(1, 1, 1)
-        ax.set_title('{0}'.format(label),
-                     fontdict={"fontproperties": fontprop},
-                     fontsize=14)
+        ax.set_title('{0}'.format(label))
+                    #fontdict={"fontproperties": fontprop}, fontsize=14)
         ax.set_axis_off()
         img = PILImage.open(img_file)
         if img.mode == 'L':
@@ -516,17 +517,16 @@ class tlpaDataset():
         for no in range(self.__len__()):
             img_file, label = self.__call__(no)
             ax = fig.add_subplot(rows, cols, no+1)  # 縦，横，通し番号
-            ax.set_title('{0}'.format(label),
-                         fontdict={"fontproperties": fontprop},
-                         fontsize=14)
+            ax.set_title('{0}'.format(label))
+                        #fontdict={"fontproperties": fontprop}, fontsize=14)
             ax.set_axis_off()
             img = PILImage.open(img_file)
             if img.mode == 'L':
                 ax.imshow(img, cmap='gray')
             else:
                 ax.imshow(img)
-            ax.set_title('{0} {1}'.format(no, label), fontdict={
-                         "fontproperties": fontprop}, fontsize=14)
+            ax.set_title('{0} {1}'.format(no, label))
+                        #fontdict={ "fontproperties": fontprop}, fontsize=14)
             # ax.axis(False)
 
 
@@ -605,9 +605,8 @@ class pntDataset():
 
         fig = plt.figure(figsize=(4, 6))
         ax = fig.add_subplot(1, 1, 1)
-        ax.set_title('{0}'.format(label),
-                     fontdict={"fontproperties": fontprop},
-                     fontsize=14)
+        ax.set_title('{0}'.format(label))
+                    #fontdict={"fontproperties": fontprop}, fontsize=14)
         ax.set_axis_off()
         img = PILImage.open(img_file)
         if img.mode == 'L':
@@ -624,15 +623,14 @@ class pntDataset():
         for no in range(self.__len__()):
             img_file, label = self.__call__(no)
             ax = fig.add_subplot(rows, cols, no+1)  # 縦，横，通し番号
-            ax.set_title('{0}'.format(label),
-                         fontdict={"fontproperties": fontprop},
-                         fontsize=14)
+            ax.set_title('{0}'.format(label))
+                        #fontdict={"fontproperties": fontprop}, fontsize=14)
             ax.set_axis_off()
             img = PILImage.open(img_file)
             if img.mode == 'L':
                 ax.imshow(img, cmap='gray')
             else:
                 ax.imshow(img)
-            ax.set_title('{0} {1}'.format(no, label), fontdict={
-                         "fontproperties": fontprop}, fontsize=14)
+            ax.set_title('{0} {1}'.format(no, label))
+                        #fontdict={ "fontproperties": fontprop}, fontsize=14)
             # ax.axis(False)
