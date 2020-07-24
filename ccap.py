@@ -178,8 +178,8 @@ class snodgrassDataset():
             ax.axis(False)
 
 
-imagenet_base = '/Users/asakawa/study/data/ImageNet/'
-ImangeNet_base = imagenet_base
+#imagenet_base = '/Users/asakawa/study/data/ImageNet/'
+#ImangeNet_base = imagenet_base
 
 
 class imagenetDataset():
@@ -204,8 +204,6 @@ class imagenetDataset():
         self.ImageNet_base = 'ccap/data/ImageNet'
         # `meta.bin` は登録していない限り使えない。だから公共の場所に置くことができない。どうする？
         #self.meta = torchvision.datasets.imagenet.load_meta_file(
-        #    root=self.ImageNet_base, file='meta.bin')
-        #self.meta = torch.load(os.path.join(self.ImageNet_base, 'imagenet2012_meta.bin'))
         self.meta = torch.load(os.path.join(self.ImageNet_base, 'meta.bin'))
         self.ImageNet_wnids = list(sorted(self.meta[0].keys()))
         self.wnid2no = {wnid: i for i,
@@ -469,7 +467,7 @@ class tlpaDataset():
                 self.tlpa_bnc[i] = self.tlpa_[ent]
                 filename = os.path.join(self.tlpa_base,
                                         self.img_dir,
-                                        '{0:03d}'.format(int(ent))+'.JPG')
+                                        '{0:03d}'.format(int(ent))+'.jpg')
                 self.tlpa_bnc[i]['img'] = filename
                 self.tlpa_bnc[i]['label'] = self.tlpa_[ent]['Name']
                 self.labels.append(self.tlpa_bnc[i]['label'])
