@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = '0.1'
+__version__ = '0.2'
 __author__ = 'Shin Asakawa'
 __email__ = 'asakawa@ieee.org'
 __license__ = 'MIT'
@@ -12,6 +12,8 @@ from .ccap import imagenetDataset
 from .ccap import salaDataset
 from .ccap import tlpaDataset
 from .ccap import pntDataset
+
+from .ccap_w2v import ccap_w2v
 
 """
 - date: 2020-0718
