@@ -12,9 +12,6 @@ import MeCab
 import jaconv
 
 import platform
-isColab = platform.system() == 'Linux'
-#if isColab:
-#    !pip install japanize_matplotlib > /dev/null 2>&1 
 import japanize_matplotlib
 
 class Minnichi(object):
@@ -40,6 +37,7 @@ class Minnichi(object):
         }
 
         self.data_fname = data_fname
+        isColab = platform.system() == 'Linux'
         hostname = 'colab' if isColab else os.uname().nodename.split('.')[0] 
         mecab_dic_dir = mecab_dic_dirs[hostname]
         if wakati == None:
