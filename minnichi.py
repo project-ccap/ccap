@@ -40,7 +40,7 @@ class Minnichi(object):
         }
 
         self.data_fname = data_fname
-        hostname = os.uname().nodename.split('.')[0] if not isColab else 'colab'
+        hostname = 'colab' if isColab else os.uname().nodename.split('.')[0] 
         mecab_dic_dir = mecab_dic_dirs[hostname]
         if wakati == None:
             self.wakati = MeCab.Tagger(f'-Owakati -d {mecab_dic_dir}').parse if hostname != 'colab' else MeCab.Tagger('-Owakati').parse
