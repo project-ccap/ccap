@@ -27,6 +27,7 @@ class Minnichi(object):
         }
 
         self.data_fname = data_fname
+        
         hostname = os.uname().nodename.split('.')[0]
         mecab_dic_dir = mecab_dic_dirs[hostname]
         if wakati == None:
