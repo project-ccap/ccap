@@ -1,11 +1,21 @@
+import sys
 import typing
 import os
-import unicodedata
+import numpy as np
+#import unicodedata
 import glob
-import jaconv
 import json
-import MeCab
 import gzip
+import matplotlib.pyplot as plt
+
+import MeCab
+import jaconv
+
+import platform
+isColab = platform.system() == 'Linux'
+#if isColab:
+#    !pip install japanize_matplotlib > /dev/null 2>&1 
+import japanize_matplotlib
 
 class Minnichi(object):
     ''' 「みんなの日本語」データから語彙辞書を作成して，上で作成した均衡コーパスのフィルタとして使用する'''
@@ -15,7 +25,9 @@ class Minnichi(object):
                  splitter=None,
                  max_length=-1,
                  data_fname='2022_0205minnichi_data.json.gz',
-                 reload:bool=False)->None:
+                 reload:bool=False,
+                 isColab=False,
+                 )->None:
         
         mecab_dic_dirs = { # MeCab のインストール場所の相違. 浅川の個人設定の差分吸収のため
             # 'Sinope':' /opt/homebrew/lib/mecab/dic/mecab-ipadic-neologd/',
@@ -24,19 +36,19 @@ class Minnichi(object):
             'Sinope':' /opt/homebrew/lib/mecab/dic/ipadic',
             'Pasiphae': '/usr/local/lib/mecab/dic/ipadic',
             'Leda': '/usr/local/lib/mecab/dic/ipadic',
+            # colab では /usr/share/mecab/dic じゃないみたい。
         }
 
         self.data_fname = data_fname
-        
-        hostname = os.uname().nodename.split('.')[0]
+        hostname = os.uname().nodename.split('.')[0] if not isColab else 'colab'
         mecab_dic_dir = mecab_dic_dirs[hostname]
         if wakati == None:
-            self.wakati = MeCab.Tagger(f'-Owakati -d {mecab_dic_dir}').parse
+            self.wakati = MeCab.Tagger(f'-Owakati -d {mecab_dic_dir}').parse if hostname == 'colab' else MeCab.Tagger('-Owakati').parse
         else:
             self.wakati = wakati
             
         if yomi == None:
-            self.yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse
+            self.yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse if hostname != 'colab' else MeCab.Tagger('-Oyomi').parse
         else:
             self.yomi = yomi
             
@@ -64,8 +76,7 @@ class Minnichi(object):
                         for l in self.splitter.tokenize(txt):
                             minnichi_text.append(l)
 
-            vocab = ['<EOS>','<SOS>','<UNK>','<PAD>','<MASK>']
-            lines, freq = {}, {}
+            vocab, lines, freq = ['<EOS>','<SOS>','<UNK>','<PAD>','<MASK>'], {}, {}
             _max_length = 0
             for i, l in enumerate(minnichi_text):
                 lines[i] = {}
@@ -95,27 +106,26 @@ class Minnichi(object):
             self.lines = lines
             for line in lines:
                 lines[line]['input_ids'] = self.convert_tokens2ids(lines[line]['tokens'])
-        else:
+        else: # reload==False
+            self.lines = {}
             with gzip.open(self.data_fname, 'rb') as fgz:
                 tmp = json.loads(fgz.read().decode('utf-8'))
-                self.lines = {}
                 for k in tmp.keys():
                     self.lines[int(k)] = tmp[k]
                     
-            #self.lines = _tmp
             _max_length = 0
-            vocab = ['<EOS>','<SOS>','<UNK>','<PAD>','<MASK>']
-            freq = {}
-            for line in self.lines:
-                if _max_length < self.lines[line]['n_token']:
-                    _max_length = self.lines[line]['n_token']
+            vocab, freq = ['<EOS>','<SOS>','<UNK>','<PAD>','<MASK>'], {}
+            for i in range(len(self.lines)):
+                if _max_length < self.lines[i]['n_token']:
+                    _max_length = self.lines[i]['n_token']
 
-                    for token in self.lines[line]['tokens']:
-                        if not token in vocab:
-                            vocab.append(token)
-                            freq[token] = 1
-                        else:
-                            freq[token] += 1
+                tokens = self.lines[i]['tokens']
+                for token in tokens:
+                    if not token in vocab:
+                        vocab.append(token)
+                        freq[token] = 1
+                    else:
+                        freq[token] += 1
             self.freq = freq
             if max_length == -1:
                 self.max_length = _max_length
@@ -123,18 +133,30 @@ class Minnichi(object):
                 self.max_length = max_length
             self.vocab = vocab
         return
+
     
     def save_data(self, out_fname=None)->None:
         if out_fname == None:
             out_fname = self.data_fname
         with gzip.open(out_fname, 'wt', encoding='UTF-8') as zipfile:
             json.dump(self.lines, zipfile)    
+
+
+    def __len__(self)->int:
+        return len(self.lines)
+
+
+    def __call__(self, x:int)->dict:
+        return self.lines[x]
+
         
     def token2id(self, word:str)->int:
         return self.vocab.index(word) if word in self.vocab else self.vocab.index('<UNK>')
+
         
     def id2token(self, id:int)->int:
         return self.vocab[id] if id < len(self.vocab) else -1
+
     
     def convert_tokens2ids(self, s:list, add_eos:bool=True)->list:
         ret = [self.token2id(word) for word in s]
@@ -142,9 +164,11 @@ class Minnichi(object):
             ret.append(self.vocab.index('<EOS>'))
         return ret
     
+
     def convert_ids2tokens(self, ids:list)->list:
         return [self.id2token(x) for x in ids]
     
+
     def tokenize(self, inputs:list, pad=True, max_length=-1)->dict:
         _max_length = max_length if max_length != -1 else self.max_length
         inputs = jaconv.normalize(inputs).strip()
@@ -157,3 +181,20 @@ class Minnichi(object):
                 ret['input_ids'].insert(0,self.vocab.index('<PAD>'))
 
         return ret
+
+
+    def draw_freq(self, 
+                  save_fname=None, 
+                  figsize=(18,8),
+                  fontsize=8,
+                  rotation=35,
+                 )->None:
+        plt.figure(figsize=figsize)
+        plt.plot(np.array(sorted(self.freq.values())[::-1]))
+        plt.title('頻度', fontsize=fontsize)
+        plt.xticks(np.arange(len(self.freq)), [self.vocab[self.vocab.index(k)] for k, _ in self.freq.items()], fontsize=fontsize, rotation=rotation)
+        plt.xlabel('頻度順に並べ替え', fontsize=fontsize)
+        plt.ylabel('頻度', fontsize=fontsize)
+        if save_fname != None:
+            plt.savefig(save_fname)
+            
