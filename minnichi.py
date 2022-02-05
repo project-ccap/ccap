@@ -33,23 +33,25 @@ class Minnichi(object):
             'Sinope':' /opt/homebrew/lib/mecab/dic/ipadic',
             'Pasiphae': '/usr/local/lib/mecab/dic/ipadic',
             'Leda': '/usr/local/lib/mecab/dic/ipadic',
-            'colab': None # では /usr/share/mecab/dic じゃないみたい。
+            'colab': '/usr/share/mecab/dic/ipadic'
         }
 
         self.data_fname = data_fname
+        
+        
         isColab = platform.system() == 'Linux'
         hostname = 'colab' if isColab else os.uname().nodename.split('.')[0] 
         mecab_dic_dir = mecab_dic_dirs[hostname]
         if wakati == None:
-            self.wakati = MeCab.Tagger(f'-Owakati -d {mecab_dic_dir}').parse if hostname != 'colab' else MeCab.Tagger('-Owakati').parse
+            self.wakati = MeCab.Tagger(f'-Owakati -d {mecab_dic_dir}').parse
         else:
             self.wakati = wakati
             
         if yomi == None:
-            self.yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse if hostname != 'colab' else MeCab.Tagger('-Oyomi').parse
+            self.yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse
         else:
             self.yomi = yomi
-            
+        
         if splitter == None:
             from konoha import SentenceTokenizer
             self.splitter = SentenceTokenizer()
