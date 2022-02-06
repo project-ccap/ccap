@@ -23,7 +23,7 @@ class Minnichi(object):
                  yomi=None,
                  splitter=None,
                  max_length=-1,
-                 data_fname='2022_0205minnichi_data.json.gz',
+                 data_fname='ccap/2022_0205minnichi_data.json.gz',
                  reload:bool=False,
                  isColab=False,
                  )->None:
