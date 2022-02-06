@@ -18,6 +18,7 @@ from .  import tsne
 from .ccap_normalize_neologd import normalize_neologd
 from . import onomatope
 from . import minnichi
+from . import vdj2500
 
 
 """

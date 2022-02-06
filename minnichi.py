@@ -12,6 +12,8 @@ import MeCab
 import jaconv
 
 import platform
+#if isColab:
+#    !pip install japanize_matplotlib > /dev/null 2>&1 
 import japanize_matplotlib
 
 class Minnichi(object):
@@ -37,8 +39,7 @@ class Minnichi(object):
         }
 
         self.data_fname = data_fname
-        
-        
+
         isColab = platform.system() == 'Linux'
         hostname = 'colab' if isColab else os.uname().nodename.split('.')[0] 
         mecab_dic_dir = mecab_dic_dirs[hostname]
@@ -51,7 +52,7 @@ class Minnichi(object):
             self.yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse
         else:
             self.yomi = yomi
-        
+            
         if splitter == None:
             from konoha import SentenceTokenizer
             self.splitter = SentenceTokenizer()
@@ -176,6 +177,7 @@ class Minnichi(object):
         tokens = self.wakati(inputs).strip().split(' ')
         ret['tokens'] = tokens
         ret['input_ids'] = self.convert_tokens2ids(ret['tokens'])
+        ret['input_tokens'] = self.convert_ids2tokens(ret['input_ids'])
         if pad:
             for i in range(_max_length - len(ret['tokens'])):
                 ret['input_ids'].insert(0,self.vocab.index('<PAD>'))
@@ -188,10 +190,12 @@ class Minnichi(object):
                   figsize=(18,8),
                   fontsize=8,
                   rotation=35,
+                  #n_best = 100,
                  )->None:
         plt.figure(figsize=figsize)
-        plt.plot(np.array(sorted(self.freq.values())[::-1]))
+        plt.plot(np.array(sorted(self.freq.values())[::-1])) #[:n_best])
         plt.title('頻度', fontsize=fontsize)
+        #plt.xticks(np.arange(len(self.freq)), [self.vocab[self.vocab.index(k)] for k in np.array(sorted(self.freq.values())[::-1])[:n_best]], fontsize=fontsize, rotation=rotation)
         plt.xticks(np.arange(len(self.freq)), [self.vocab[self.vocab.index(k)] for k, _ in self.freq.items()], fontsize=fontsize, rotation=rotation)
         plt.xlabel('頻度順に並べ替え', fontsize=fontsize)
         plt.ylabel('頻度', fontsize=fontsize)
