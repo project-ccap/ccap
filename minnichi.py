@@ -45,19 +45,19 @@ class Minnichi(object):
         mecab_dic_dir = mecab_dic_dirs[hostname]
         if wakati == None:
             if isColab:
-                self.wakati = MeCab.Tagger(f'-Owakati').parse
+                self.wakati = MeCab.Tagger('-Owakati').parse
             else:
                 self.wakati = MeCab.Tagger(f'-Owakati -d {mecab_dic_dir}').parse
         else:
             self.wakati = wakati
             
-        if yomi == None:
-            if isColab:
-                self.yomi = MeCab.Tagger('-Oyomi').parse
-            else:
-                self.yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse
-        else:
-            self.yomi = yomi
+        # if yomi == None:
+        #     if isColab:
+        #         self.yomi = MeCab.Tagger('-Oyomi').parse
+        #     else:
+        #         self.yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse
+        # else:
+        #     self.yomi = yomi
             
         if splitter == None:
             from konoha import SentenceTokenizer
@@ -88,14 +88,14 @@ class Minnichi(object):
             for i, l in enumerate(minnichi_text):
                 lines[i] = {}
                 tokens = self.wakati(l).strip().split(' ')
-                phon = self.yomi(self.wakati(l).strip()).strip().split(' ')
+                #phon = self.yomi(self.wakati(l).strip()).strip().split(' ')
                 #lines[i]['orig'] = l # いらんかなー
                 lines[i]['tokens'] = tokens
                 lines[i]['n_token'] = len(lines[i]['tokens'])
                 if _max_length < lines[i]['n_token']:
                     _max_length = lines[i]['n_token']
-                lines[i]['yomi'] = phon
-                lines[i]['n_yomi'] = len(lines[i]['yomi'])
+                #lines[i]['yomi'] = phon
+                #lines[i]['n_yomi'] = len(lines[i]['yomi'])
                 for token in tokens:
                     if not token in vocab:
                         vocab.append(token)
