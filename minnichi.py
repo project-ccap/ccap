@@ -44,14 +44,18 @@ class Minnichi(object):
         hostname = 'colab' if isColab else os.uname().nodename.split('.')[0] 
         mecab_dic_dir = mecab_dic_dirs[hostname]
         if wakati == None:
-            self.wakati = MeCab.Tagger(f'-Owakati').parse
-            #self.wakati = MeCab.Tagger(f'-Owakati -d {mecab_dic_dir}').parse
+            if isColab:
+                self.wakati = MeCab.Tagger(f'-Owakati').parse
+            else:
+                self.wakati = MeCab.Tagger(f'-Owakati -d {mecab_dic_dir}').parse
         else:
             self.wakati = wakati
             
         if yomi == None:
-            self.yomi = MeCab.Tagger(f'-Oyomi').parse
-            #self.yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse
+            if isColab:
+                self.yomi = MeCab.Tagger('-Oyomi').parse
+            else:
+                self.yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse
         else:
             self.yomi = yomi
             
