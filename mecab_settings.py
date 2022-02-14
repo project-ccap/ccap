@@ -8,6 +8,7 @@ from ccap.mecab_settings import wakati, parser
 
 などとする
 '''
+
 mecab_dic_dirs = {
     # 'Sinope':' /opt/homebrew/lib/mecab/dic/mecab-ipadic-neologd/',
     # 'Pasiphae': '/usr/local/lib/mecab/dic/mecab-ipadic-neologd',
@@ -15,12 +16,14 @@ mecab_dic_dirs = {
     'Sinope':' /opt/homebrew/lib/mecab/dic/ipadic',
     'Pasiphae': '/usr/local/lib/mecab/dic/ipadic',
     'Leda': '/usr/local/lib/mecab/dic/ipadic',
+    'colab': '/usr/share/mecab/dic/ipadic'
 }
 
 import os
 import MeCab
-hostname = os.uname().nodename.split('.')[0]
+
+isColab = 'google.colab' in str(get_ipython())
+hostname = 'colab' if isColab else os.uname().nodename.split('.')[0]
 mecab_dic_dir = mecab_dic_dirs[hostname]
 wakati = MeCab.Tagger(f'-Owakati -d {mecab_dic_dir}').parse
 yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse
-
