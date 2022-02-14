@@ -24,6 +24,10 @@ import MeCab
 
 isColab = 'google.colab' in str(get_ipython())
 hostname = 'colab' if isColab else os.uname().nodename.split('.')[0]
-mecab_dic_dir = mecab_dic_dirs[hostname]
-wakati = MeCab.Tagger(f'-Owakati -d {mecab_dic_dir}').parse
-yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse
+if isColab:
+    wakati = MeCab.Tagger('-Owakati').parse
+    yomi = MeCab.Tagger('-Oyomi').parse
+else:
+    mecab_dic_dir = mecab_dic_dirs[hostname]
+    wakati = MeCab.Tagger(f'-Owakati -d {mecab_dic_dir}').parse
+    yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse
