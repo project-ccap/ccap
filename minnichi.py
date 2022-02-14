@@ -27,7 +27,7 @@ class Minnichi(object):
                  reload:bool=False,
                  isColab=False,
                  )->None:
-        
+
         mecab_dic_dirs = { # MeCab のインストール場所の相違. 浅川の個人設定の差分吸収のため
             # 'Sinope':' /opt/homebrew/lib/mecab/dic/mecab-ipadic-neologd/',
             # 'Pasiphae': '/usr/local/lib/mecab/dic/mecab-ipadic-neologd',
@@ -40,7 +40,8 @@ class Minnichi(object):
 
         self.data_fname = data_fname
 
-        isColab = platform.system() == 'Linux'
+        #isColab = platform.system() == 'Linux'
+        isColab = 'google.colab' in str(get_ipython()) 
         hostname = 'colab' if isColab else os.uname().nodename.split('.')[0] 
         mecab_dic_dir = mecab_dic_dirs[hostname]
         if wakati == None:
@@ -50,7 +51,7 @@ class Minnichi(object):
                 self.wakati = MeCab.Tagger(f'-Owakati -d {mecab_dic_dir}').parse
         else:
             self.wakati = wakati
-            
+
         # if yomi == None:
         #     if isColab:
         #         self.yomi = MeCab.Tagger('-Oyomi').parse
@@ -58,7 +59,7 @@ class Minnichi(object):
         #         self.yomi = MeCab.Tagger(f'-Oyomi -d {mecab_dic_dir}').parse
         # else:
         #     self.yomi = yomi
-            
+
         if splitter == None:
             from konoha import SentenceTokenizer
             self.splitter = SentenceTokenizer()

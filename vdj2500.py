@@ -6,10 +6,13 @@ import requests
 import pandas as pd
 
 import MeCab
-import platform
+
+isColab = 'google.colab' in str(get_ipython()) 
+#import platform
 #isColab = platform.system() == 'Linux'
 #if isColab:
 #    !pip install 'konoha[mecab]'
+
 import jaconv
 from konoha import SentenceTokenizer
 
@@ -33,21 +36,23 @@ class VDJ2500():
             'colab': '/usr/share/mecab/dic/ipadic'
         }
 
-        isColab = platform.system() == 'Linux'
+        isColab = 'google.colab' in str(get_ipython()) 
+        #isColab = platform.system() == 'Linux'
+
         hostname = 'colab' if isColab else os.uname().nodename.split('.')[0] 
         mecab_dic_dir = mecab_dic_dirs[hostname]
         if wakati == None:
             self.wakati = MeCab.Tagger(f'-Owakati').parse
         else:
             self.wakati = wakati
-            
+
         if splitter == None:
             self.splitter = SentenceTokenizer()
         else:
             self.splitter = splitter
-        
+
         self.max_length=10
-        
+
         self.data_fname = './2022_0206vdj2500.gz'
         url='http://www17408ui.sakura.ne.jp/tatsum/database/VDLJ_Ver1_0_General-Learners_Basic-2500.xlsx'
         data_fname = '2022_0206vdj2500.gz'
@@ -61,7 +66,7 @@ class VDJ2500():
                     total_length = int(r.headers.get('content-length'))
                     print('Downloading {0} - {1} bytes'.format(excel_fname, (total_length)))
                     f.write(r.content)
-                
+
             df = pd.read_excel(excel_fname, sheet_name='基本語2500　Basic 2500 Words')
             df = df[['ふつうの（新聞の）書きかた\nStandard (Newspaper) Orthography','ふつうの読みかた（カタカナ）\nStandard Reading (Katakana)','品詞\nPart of Speech']]
             df = df.rename(columns = {'ふつうの（新聞の）書きかた\nStandard (Newspaper) Orthography':'word',
@@ -72,11 +77,11 @@ class VDJ2500():
         else: # reload = False (default)
             with gzip.open(self.data_fname, 'rb') as fgz:
                 self.vocab = json.loads(fgz.read().decode('utf-8'))
-            
+
     def __len__(self):
         return len(self.vocab)
 
-    
+
     def save_data(self, out_fname=None)->None:
         if out_fname == None:
             out_fname = self.data_fname
