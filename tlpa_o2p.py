@@ -156,8 +156,8 @@ class TLPA():
         # そのため，TLPA の刺激語のうち，最低頻度以上の全単語を使って学習を行うことを考えるためである。
         max_idx, __tlpa_words = 0, []
         for w in _tlpa_words:
-            if w in w2v:
-                idx = w2v.key_to_index[w]
+            if w in self.w2v:
+                idx = selfw2v.key_to_index[w]
                 max_idx = idx if idx > max_idx else max_idx
                 __tlpa_words.append(w)
             # else:
