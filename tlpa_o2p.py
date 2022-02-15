@@ -8,9 +8,8 @@ from tqdm.notebook import tqdm
 from ccap import ccap_w2v
 
 isColab = 'google.colab' in str(get_ipython())
-w2v = ccap_w2v(is2017=False, isColab=isColab).w2v
-
-from ccap.mecab_settings import yomi
+#w2v = ccap_w2v(is2017=False, isColab=isColab).w2v
+#from ccap.mecab_settings import yomi
 
 class TLPA():
     '''TLPA の語彙を元に考えてみよう!'''    
