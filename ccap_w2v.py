@@ -81,7 +81,7 @@ class ccap_w2v():
         #import MeCab
 
         # word2vec データの読み込み, ファイルの所在に応じて変更してください
-        if self.is2017:
+        if is2017:
             w2v_base = '/Users/asakawa/study/2016wikipedia/' if isMac else '.'
             w2v_file = '2017Jul_jawiki-wakati_neologd_hid200_win20_neg20_cbow.bin.gz'
             w2v_file = os.path.join(w2v_base, w2v_file)
