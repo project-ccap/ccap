@@ -13,8 +13,8 @@ isColab = 'google.colab' in str(get_ipython())
 class TLPA():
     '''TLPA の語彙を元に考えてみよう!'''    
     def __init__(self, 
-                 w2v,
-                 yomi,
+                 yomi=yomi,
+                 w2v=w2v,
                  reload=True,
                  traindata_size = 10000,
                 ):
