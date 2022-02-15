@@ -5,9 +5,8 @@ import jaconv
 import numpy as np
 from tqdm.notebook import tqdm
 
-from ccap import ccap_w2v
-
 isColab = 'google.colab' in str(get_ipython())
+#from ccap import ccap_w2v
 #w2v = ccap_w2v(is2017=False, isColab=isColab).w2v
 #from ccap.mecab_settings import yomi
 
