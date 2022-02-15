@@ -20,7 +20,7 @@ import pandas as pd
 
 class Onomatopea():
     """オノマトペデータのハンドリング
-    
+
     Args:
     reload: boolean
         Ture であれば，エクセルファイルからデータを再読み込みする。
@@ -33,7 +33,7 @@ class Onomatopea():
     Description:
         内部で 辞書 data が定義してある。この辞書には以下のエントリがある
         dict_keys(['katakana', 'orth', 'orth_ids', 'phon', 'phon_ids'])
-        
+
     Functions:
 
     tokenize(self, word:str)->list: 任意の単語を ['input_ids'] と ['teach_ids'] の ID リストとして返す
@@ -41,16 +41,16 @@ class Onomatopea():
     graph_ids2wrd(self, graph_ids:list)->list: 書記素 ID からなるリストを渡して，対応する単語を返す
 
     phon_ids2wrd(self, phon_ids:list)->list: 音韻 ID からなるリストを渡して，対応する単語を返す
-    
+
     draw_phoneme_freq(): 音素の頻度グラフを描画する
-            
+
     draw_grapheme_freq(): 書記素の頻度グラフを描画する
 
     __len__(self)->int: 登録されているオノマトペ総数を返す
-    
+
     __call__(self, args:list=None)->dict: 登録されているオノマトペの情報を返す。
         引数として，数字 または 単語 をとる
-        
+
     Variables:
     data: オノマトペ情報を入れた dict
     grapheme: 書記素データ
@@ -63,7 +63,7 @@ class Onomatopea():
     phonology_freq: phoneme_freq に同じ
     vocab: 全オノマトペ単語からなるリスト
     """
-    
+
     def __init__(self, vocab:list=None, reload:bool=False)->None:
         super().__init__()
 
@@ -557,4 +557,3 @@ def hiragana2julius(text):
 
     text = text.replace(':+', ':')
     return text
-            
