@@ -25,7 +25,7 @@ class TLPA():
 
         if reload:
             self.tlpa_vocab = self.get_tlpa_vocab()
-            #print(f'word2vec のインデックスのうち最大値 max_idx:{max_idx} {w2v.index_to_key[max_idx]}')
+            #print(f'word2vec のインデックスのうち最大値 max_idx:{max_idx} {self.w2v.index_to_key[max_idx]}')
             self.ntt_freq = self.get_ntt_freq()
             self.training_vocab = self.get_training_vocab()
             #self.training_vocab = vocab
@@ -65,7 +65,7 @@ class TLPA():
                                     'phone':_phon,
                                     'ortho_ids': ortho_ids,
                                     'phone_ids': phone_ids,
-                                    'semem':w2v[orth],
+                                    'semem':self.w2v[orth],
                                    }
                 #orth2idx[orth] = training_data[i]
                 len_orth, len_phon = len(_orth), len(_phon)
@@ -101,7 +101,7 @@ class TLPA():
                                 'phone':_phon,
                                 'ortho_ids': ortho_ids,
                                 'phone_ids': phone_ids,
-                                'semem':w2v[orth],
+                                'semem':self.w2v[orth],
                                }
                 len_orth, len_phon = len(_orth), len(_phon)
                 max_ortho_length = len_orth if len_orth > max_ortho_length else max_ortho_length
@@ -157,7 +157,7 @@ class TLPA():
         max_idx, __tlpa_words = 0, []
         for w in _tlpa_words:
             if w in self.w2v:
-                idx = selfw2v.key_to_index[w]
+                idx = self.w2v.key_to_index[w]
                 max_idx = idx if idx > max_idx else max_idx
                 __tlpa_words.append(w)
             # else:
