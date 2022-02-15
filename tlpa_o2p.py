@@ -13,13 +13,12 @@ isColab = 'google.colab' in str(get_ipython())
 class TLPA():
     '''TLPA の語彙を元に考えてみよう!'''    
     def __init__(self, 
-                 w2v:w2v=w2v, 
-                 yomi:MeCab.Tagger=yomi,
+                 w2v,
+                 yomi,
                  reload=True,
                  traindata_size = 10000,
                 ):
 
-        super().__init__()
         self.w2v = w2v
         self.yomi = yomi
         self.traindata_size = traindata_size
