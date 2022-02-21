@@ -21,7 +21,7 @@ class TLPA():
 
         isColab = 'google.colab' in str(get_ipython())
 
-        self.w2v = w2v if w2v!=None else ccap_w2v(is2017=False, isColab=isColab).w2v
+        self.w2v = w2v if w2v!=None else ccap_w2v(is2017=True).w2v
         #self.w2v = w2v
 
         self.yomi = yomi if yomi!=None else MeCab.Tagger('-Oyomi').parse
