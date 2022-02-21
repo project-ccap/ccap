@@ -5,7 +5,7 @@ import jaconv
 import numpy as np
 from tqdm.notebook import tqdm
 
-isColab = 'google.colab' in str(get_ipython())
+#isColab = 'google.colab' in str(get_ipython())
 from ccap import ccap_w2v
 #w2v = ccap_w2v(is2017=False, isColab=isColab).w2v
 #from ccap.mecab_settings import yomi
@@ -18,6 +18,8 @@ class TLPA():
                  reload=True,
                  traindata_size = 10000,
                 ):
+
+        isColab = 'google.colab' in str(get_ipython())
 
         self.w2v = w2v if w2v!=None else ccap_w2v(is2017=False, isColab=isColab).w2v
         #self.w2v = w2v
