@@ -68,16 +68,16 @@ class ccap_w2v():
                 (f_id, outfile) = w2v_2021['sgns128']['id'], w2v_2021['sgns128']['outfile']
                 #下記 gdd.download_file_from_google_drive がエラーになったので昔の方法に戻した
                 #print(f_id, outfile)
-                #gdd.download_file_from_google_drive(file_id=f_id,
-                #                                    dest_path=outfile,
-                #                                    unzip=False,
-                #                                    showsize=True)
-                !wget --no-check-certificate --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1B9HGhLZOja4Xku5c_d-kMhCXn1LBZgDb' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1B9HGhLZOja4Xku5c_d-kMhCXn1LBZgDb" -O 2021_05jawiki_hid128_win10_neg10_cbow.bin.gz && rm -rf /tmp/cookies.txt
-                !wget --no-check-certificate --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1OWmFOVRC6amCxsomcRwdA6ILAA5s4y4M' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1OWmFOVRC6amCxsomcRwdA6ILAA5s4y4M" -O 2021_05jawiki_hid128_win10_neg10_sgns.bin.gz && rm -rf /tmp/cookies.txt
-                !wget --no-check-certificate --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1JTkU5SUBU2GkURCYeHkAWYs_Zlbqob0s' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1JTkU5SUBU2GkURCYeHkAWYs_Zlbqob0s" -O 2021_05jawiki_hid200_win20_neg20_cbow.bin.gz && rm -rf /tmp/cookies.txt
-                !wget --no-check-certificate --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1VPL2Mr9JgWHik9HjRmcADoxXIdrQ3ds7' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1VPL2Mr9JgWHik9HjRmcADoxXIdrQ3ds7" -O 2021_05jawiki_hid200_win20_neg20_sgns.bin.gz && rm -rf /tmp/cookies.txt
+                gdd.download_file_from_google_drive(file_id=f_id,
+                                                    dest_path=outfile,
+                                                    unzip=False,
+                                                    showsize=True)
+                #!wget --no-check-certificate --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1B9HGhLZOja4Xku5c_d-kMhCXn1LBZgDb' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1B9HGhLZOja4Xku5c_d-kMhCXn1LBZgDb" -O 2021_05jawiki_hid128_win10_neg10_cbow.bin.gz && rm -rf /tmp/cookies.txt
+                #!wget --no-check-certificate --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1OWmFOVRC6amCxsomcRwdA6ILAA5s4y4M' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1OWmFOVRC6amCxsomcRwdA6ILAA5s4y4M" -O 2021_05jawiki_hid128_win10_neg10_sgns.bin.gz && rm -rf /tmp/cookies.txt
+                #!wget --no-check-certificate --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1JTkU5SUBU2GkURCYeHkAWYs_Zlbqob0s' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1JTkU5SUBU2GkURCYeHkAWYs_Zlbqob0s" -O 2021_05jawiki_hid200_win20_neg20_cbow.bin.gz && rm -rf /tmp/cookies.txt
+                #!wget --no-check-certificate --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1VPL2Mr9JgWHik9HjRmcADoxXIdrQ3ds7' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1VPL2Mr9JgWHik9HjRmcADoxXIdrQ3ds7" -O 2021_05jawiki_hid200_win20_neg20_sgns.bin.gz && rm -rf /tmp/cookies.txt
 
-        import MeCab
+        #import MeCab
 
         # word2vec データの読み込み, ファイルの所在に応じて変更してください
         if is2017:
