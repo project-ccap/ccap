@@ -6,22 +6,32 @@ import numpy as np
 from tqdm.notebook import tqdm
 
 isColab = 'google.colab' in str(get_ipython())
-#from ccap import ccap_w2v
+from ccap import ccap_w2v
 #w2v = ccap_w2v(is2017=False, isColab=isColab).w2v
 #from ccap.mecab_settings import yomi
 
 class TLPA():
     '''TLPA の語彙を元に考えてみよう!'''    
     def __init__(self, 
-                 yomi=yomi,
-                 w2v=w2v,
+                 yomi=None,
+                 w2v=None,
                  reload=True,
                  traindata_size = 10000,
                 ):
 
-        self.w2v = w2v
-        self.yomi = yomi
+        self.w2v = w2v if w2v!=None else ccap_w2v(is2017=False, isColab=isColab).w2v
+        #self.w2v = w2v
+
+        self.yomi = yomi if yomi!=None else MeCab.Tagger('-Oyomi').parse
+        #self.yomi = yomi
         self.traindata_size = traindata_size
+
+        self.ortho_vocab, self.ortho_freq = ['<EOW>','<SOW>','<UNK>', '<PAD>'], {}
+        self.phone_vocab, self.phone_freq = ['<EOW>','<SOW>','<UNK>', '<PAD>'], {}
+        self.phone_vocab = ['<EOW>', '<SOW>', '<UNK>', '<PAD>', 
+        'n', 'o', 'h', 'a', 'i', 't', 'g', 'r', 'u', 'd', 'e', 'sh', 'q', 'm', 'k', 's', 'y', 'p', 'N', 'b', 'ts', 'o:',\
+        'ky', 'f', 'w', 'ch', 'ry', 'gy', 'u:', 'z', 'j', 'py', 'hy', 'i:', 'e:', 'a:', 'by', 'ny', 'my', 'dy', \
+        'a::', 'u::', 'o::']
 
         if reload:
             self.tlpa_vocab = self.get_tlpa_vocab()
@@ -31,17 +41,10 @@ class TLPA():
             #self.training_vocab = vocab
             self.vocab = self.tlpa_vocab + self.training_vocab
 
-            ortho_vocab, ortho_freq = ['<EOW>','<SOW>','<UNK>', '<PAD>'], {}
-            phone_vocab, phone_freq = ['<EOW>','<SOW>','<UNK>', '<PAD>'], {}
-            phone_vocab= ['<EOW>', '<SOW>', '<UNK>', '<PAD>', \
-                          'n', 'o', 'h', 'a', 'i', 't', 'g', 'r', 'u', 'd', 'e', 'sh', 'q', 'm', 'k', 's', 'y', 'p', 'N', 'b', 'ts', 'o:',\
-                          'ky', 'f', 'w', 'ch', 'ry', 'gy', 'u:', 'z', 'j', 'py', 'hy', 'i:', 'e:', 'a:', 'by', 'ny', 'my', 'dy', \
-                          'a::', 'u::', 'o::']
-
-            training_data, excluded_data = {}, []
+            self.training_data, self.excluded_data = {}, []
             max_ortho_length, max_phone_length = 0, 0
             for orth in tqdm(self.training_vocab):
-                i = len(training_data)
+                i = len(self.training_data)
 
                 if orth in self.ntt_orth2hira:
                     _yomi = jaconv.kata2hira(self.ntt_orth2hira[orth])
@@ -50,31 +53,31 @@ class TLPA():
                 _phon = self.hira2julius(_yomi).split(' ')
                 _orth = [c for c in orth]
 
-                if False in [True if p in phone_vocab else False for p in _phon]:
-                    excluded_data.append(orth)
+                if False in [True if p in self.phone_vocab else False for p in _phon]:
+                    self.excluded_data.append(orth)
                     continue
-                phone_ids = [phone_vocab.index(p) for p in _phon]
+                phone_ids = [self.phone_vocab.index(p) for p in _phon]
 
                 for o in _orth:
-                    if not o in ortho_vocab:
-                        ortho_vocab.append(o)
-                ortho_ids = [ortho_vocab.index(o) for o in _orth]
+                    if not o in self.ortho_vocab:
+                        self.ortho_vocab.append(o)
+                ortho_ids = [self.ortho_vocab.index(o) for o in _orth]
 
-                training_data[i] = {'orig': orth,
-                                    'ortho':_orth,
-                                    'phone':_phon,
-                                    'ortho_ids': ortho_ids,
-                                    'phone_ids': phone_ids,
-                                    'semem':self.w2v[orth],
+                self.training_data[i] = {'orig': orth,
+                                        'ortho':_orth,
+                                        'phone':_phon,
+                                        'ortho_ids': ortho_ids,
+                                        'phone_ids': phone_ids,
+                                        'semem':self.w2v[orth],
                                    }
                 #orth2idx[orth] = training_data[i]
                 len_orth, len_phon = len(_orth), len(_phon)
                 max_ortho_length = len_orth if len_orth > max_ortho_length else max_ortho_length
                 max_phone_length = len_phon if len_phon > max_phone_length else max_phone_length
-                if len(training_data) >= self.traindata_size:
+                if len(self.training_data) >= self.traindata_size:
                     break
 
-            self.training_data = training_data
+            #self.training_data = training_data
 
             tlpa_data = {}
             for orth in self.tlpa_vocab:
@@ -87,14 +90,14 @@ class TLPA():
                 _orth = [c for c in orth]
 
                 for p in _phon:
-                    if not p in phone_vocab:
-                        phone_vocab.append(p)
-                phone_ids = [phone_vocab.index(p) for p in _phon]
+                    if not p in self.phone_vocab:
+                        self.phone_vocab.append(p)
+                phone_ids = [self.phone_vocab.index(p) for p in _phon]
 
                 for o in _orth:
-                    if not o in ortho_vocab:
-                        ortho_vocab.append(o)
-                ortho_ids = [ortho_vocab.index(o) for o in _orth]
+                    if not o in self.ortho_vocab:
+                        self.ortho_vocab.append(o)
+                ortho_ids = [self.ortho_vocab.index(o) for o in _orth]
 
                 tlpa_data[i] = {'orig': orth,
                                 'ortho':_orth,
@@ -108,12 +111,12 @@ class TLPA():
                 max_phone_length = len_phon if len_phon > max_phone_length else max_phone_length
                 #orth2idx[orth] = tlpa_data[i]
 
-            #self.orth2idx = orth2idx
-            self.ortho_vocab, self.phone_vocab = ortho_vocab, phone_vocab
-            self.max_ortho_length = max_ortho_length
-            self.max_phone_length = max_phone_length
+        #self.orth2idx = orth2idx
+        #self.ortho_vocab, self.phone_vocab = ortho_vocab, phone_vocab
+        self.max_ortho_length = max_ortho_length
+        self.max_phone_length = max_phone_length
 
-            self.tlpa_data = tlpa_data
+        self.tlpa_data = tlpa_data
 
 
     def hira2julius(self, text:str)->str:
