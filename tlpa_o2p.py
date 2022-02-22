@@ -21,10 +21,18 @@ class TLPA():
 
         isColab = 'google.colab' in str(get_ipython())
 
-        self.w2v = w2v if w2v!=None else ccap_w2v(is2017=False).w2v
-        #self.w2v = w2v
+        if w2v != None:
+            self.w2v = w2v
+        else:
+            from ccap import ccap_w2v
+            self.w2v = ccap_w2v(is2017=False).w2v
 
-        self.yomi = yomi if yomi!=None else MeCab.Tagger('-Oyomi').parse
+        if yomi != None:
+            self.yomi = yomi
+        else:
+            from ccap.mecab_settings import yomi
+            self.yomi = yomi
+
         #self.yomi = yomi
         self.traindata_size = traindata_size
 

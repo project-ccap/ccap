@@ -95,6 +95,9 @@ class ccap_w2v():
 
         w2v_base = '.' if isColab else w2v_base
         w2v_file = os.path.join(w2v_base, w2v_file)
-        k
-        self.w2v = w2v
+
+        self.w2v = KeyedVectors.load_word2vec_format(w2v_file, 
+                                                    encoding='utf-8', 
+                                                    unicode_errors='replace',
+                                                    binary=True)         
         #self.tagger = MeCab.Tagger('-Oyomi ' + neologd_path)    
