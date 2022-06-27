@@ -79,14 +79,16 @@ class ccap_w2v():
 #!wget --no-check-certificate --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1VPL2Mr9JgWHik9HjRmcADoxXIdrQ3ds7' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1VPL2Mr9JgWHik9HjRmcADoxXIdrQ3ds7" -O 2021_05jawiki_hid200_win20_neg20_sgns.bin.gz && rm -rf /tmp/cookies.txt
 
         #import MeCab
+    
+        HOME = os.environ['HOME']
 
         # word2vec データの読み込み, ファイルの所在に応じて変更してください
         if self.is2017:
-            w2v_base = '/Users/asakawa/study/2016wikipedia/' if isMac else '.'
+            w2v_base = os.path.join(HOME, 'study/2016wikipedia/') if isMac else '.'
             w2v_file = '2017Jul_jawiki-wakati_neologd_hid200_win20_neg20_cbow.bin.gz'
             w2v_file = os.path.join(w2v_base, w2v_file)
         else:
-            w2v_base = '/Users/asakawa/study/2019attardi_wikiextractor.git/wiki_texts/AA' if isMac else '.'
+            w2v_base = os.path.join(HOME, 'study/2019attardi_wikiextractor.git/wiki_texts/AA') if isMac else '.'
             w2v_file = '2021_05jawiki_hid128_win10_neg10_sgns.bin'
 
         #if self.isColab:
