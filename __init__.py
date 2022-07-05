@@ -12,6 +12,7 @@ from .ccap import imagenetDataset
 from .ccap import salaDataset
 from .ccap import tlpaDataset
 from .ccap import pntDataset
+from .ccap import tsne
 #from . import mecab_settings
 #from . import tlpa_o2p # this name seems to be obsolute
 #from . import multi_modal_dataset
