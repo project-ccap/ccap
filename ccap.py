@@ -26,7 +26,7 @@ class snodgrassDataset():
     Snodgrass and Vanderwart (1980) 画像管理
     ---------------------------------------
 
-    Nishimoto et al. (2005) からデータを入手 済であることが前提
+    Nishimoto+(2005) からデータを入手 済であることが前提
 
     - papers:
     - Joan Gay Snodgrass and Mary Vanderwart (1980) A Standardized Set of 260 Pictures:
@@ -106,7 +106,6 @@ class snodgrassDataset():
         #    self.WordNetDict[img_no] = self.WordNet2ent(word_)
 
     # WordNet 情報の付加
-
     def WordNet2ent(self, word):
         synsets = wn.synsets(word, pos='n')
         if len(synsets) == 0:
@@ -162,10 +161,11 @@ class snodgrassDataset():
 
         i = 1
         for no in range(self.__len__()):
-            img_file, label = self.no_or_label(no + 1, lang=lang)
+            img_file, label = self.no_or_label(no, lang=lang)
+            #img_file, label = self.no_or_label(no + 1, lang=lang)
             ax = fig.add_subplot(rows, cols, no+1)  # 縦，横，通し番号
 
-            ax.set_title('{0}'.format(label)) 
+            ax.set_title('{0}'.format(label))
                         #fontdict={ "fontproperties": fontprop}, fontsize=14)
             ax.set_axis_off()
             img = PILImage.open(img_file)
@@ -538,8 +538,8 @@ class pntDataset():
     def __init__(self):
         self.stims_url = 'https://raw.githubusercontent.com/hanayik/Philadelphia-Naming-Test/master/assets/stim.csv'
         #self.img_url = '/Users/asakawa/study/2020hanayik_Philadelphia-Naming-Test.git/assets/pics'
-        #self.stims_txt = 'stim.csv'
-        self.stims_txt = 'pnt_stim.csv'
+        self.stims_txt = 'stim.csv'
+        #self.stims_txt = 'pnt_stim.csv'
         #self.stim_ja_txt = '2020pnt_stims_ja.txt'
         self.stim_ja_txt = 'pnt_stim_ja.txt'
         #self.base = '/Users/asakawa/study/2020ccap'
@@ -562,7 +562,8 @@ class pntDataset():
 
         with open(os.path.join(self.base, self.stim_ja_txt), 'r') as f:
             ja_ = f.readlines()
-        label_ja = {i: label.strip() for i, label in enumerate(ja_)}
+        self.labels_ja = [label.strip() for label in ja_]
+        #self.labels_ja = {i: label.strip() for i, label in enumerate(ja_)}
 
         self.dict = self.pd.to_dict()
         self.pics = self.dict['PictureName']
@@ -575,8 +576,8 @@ class pntDataset():
             num = self.dict['OrderNum'][i]
             img = os.path.join(self.base, self.img_dir, self.pics[i]+'.png')
             self.data[i] = {'img': img,
-                            'label': self.pics[i], 
-                            'label_ja': label_ja[i]}
+                            'label': self.pics[i],
+                            'label_ja': self.labels_ja[i]}
             self.labels.append(self.data[i]['label'])
 
         #self.labels = label.values()
