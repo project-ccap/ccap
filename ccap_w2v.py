@@ -90,7 +90,7 @@ class ccap_w2v():
             w2v_file = os.path.join(w2v_base, w2v_file)
         else:
             w2v_base = os.path.join(HOME, 'study/2019attardi_wikiextractor.git/wiki_texts/AA') if isMac else '.'
-            w2v_file = '2021_05jawiki_hid128_win10_neg10_sgns.bin'
+            w2v_file = '2021_05jawiki_hid128_win10_neg10_sgns.bin.gz'
 
         #if self.isColab:
         #    neologd_path = "-d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd"
