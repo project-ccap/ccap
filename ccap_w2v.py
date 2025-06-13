@@ -7,7 +7,8 @@ import requests
 # if platform.system() != 'Dawrin':
 #     !pip install googledrivedownloader
     
-from google_drive_downloader import GoogleDriveDownloader as gdd
+#from google_drive_downloader import GoogleDriveDownloader as gdd
+import googledrivedownloader as gdd
                 
 # word2vec のため gensim を使う
 from gensim.models import KeyedVectors
